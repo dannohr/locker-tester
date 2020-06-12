@@ -1,0 +1,52 @@
+.locker {
+  width: 200px;
+  height: 90vh;
+  margin: 5px;
+  display: "flex";
+  flex-direction: "column";
+}
+
+.two {
+  background: "deepskyblue";
+  flex-grow: 3;
+  /* border: "3px solid #888888"; */
+  /* outline: "10px solid #888888";
+  outline-offset: -30px; */
+}
+
+.three {
+  background: "yellow";
+  flex-grow: 3;
+  border: "3px solid #888888";
+}
+
+.element {
+  -moz-transition: all 0.5s ease-in;
+  -o-transition: all 0.5s ease-in;
+  -webkit-transition: all 0.5s ease-in;
+  transition: all 0.5s ease-in;
+  color: gray !important;
+  padding: 20px;
+}
+
+.highlight {
+  color: #ff0000 !important;
+}
+
+.locker-open {
+  /* color: #fff;
+  padding: 10px;
+  display: inline-block; */
+  animation: blinkingBackground 3s infinite;
+}
+@keyframes blinkingBackground {
+  50% {
+    background-color: #10c018;
+  }
+  /* 66% {
+    background-color: #1056c0;
+  }
+  100% {
+    background-color: #ef0a1a;
+  } */
+}
