@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import LockerSystem from "./LockerSystem";
-import ModbusServer from "./SetupComponents/ModbusServerSetup";
+import ModbusServerSetup from "./SetupComponents/ModbusServerSetup";
 import ModbusTest from "./SetupComponents/ModbusTest";
 import MenuBar from "./AppBar";
 
@@ -17,7 +17,7 @@ export default function App() {
             renders the first one that matches the current URL. */}
           <Switch>
             <Route path="/server">
-              <ModbusServer />
+              <ModbusServerSetup />
             </Route>
             <Route path="/test">
               <ModbusTest />

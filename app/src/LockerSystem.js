@@ -12,6 +12,85 @@ var numPerColumn = 15;
 // second number is the size of the kiosk door
 var kioskLocationSize = [{ kioskAfter: 58, kioskSize: 5 }];
 
+function LockerSystem() {
+  const [doorStatus, setDoorStatus] = useState([]);
+
+  useEffect(() => {
+    refreshInputs();
+  }, []);
+
+  var refreshInputs = () => {
+    axios.get(`/api/getAllInputStatus`).then((res) => {
+      // let doorStatus = chunkArray(res.data[0].doorOpen, 8);
+      let doorStatus = res.data[0].doorOpen;
+
+      setDoorStatus({ doorStatus });
+      console.log(doorStatus);
+
+      setLockerSystemDoorStatus(doorStatus, systemLayout);
+    });
+  };
+
+  let systemLayout = buildSystemLayout(
+    lockers,
+    numPerColumn,
+    kioskLocationSize
+  );
+
+  return (
+    <div className="App">
+      <Grid container>
+        {systemLayout.map((lockerColumn, index) => (
+          <Column
+            key={index}
+            lockerColumn={lockerColumn}
+            columnNum={index + 1}
+            doorStatus={doorStatus[index]}
+            // setDoorOpenStatus={setDoorOpenStatus}
+          />
+        ))}
+      </Grid>
+    </div>
+  );
+}
+
+export default LockerSystem;
+
+var setLockerSystemDoorStatus = (statusArr, systemLayout) => {
+  console.log(statusArr);
+
+  let testStatus = [];
+  let testColumn = [];
+
+  // First loop is to go through the columns
+  for (let i = 0; i < systemLayout.length; i++) {
+    // console.log(systemLayout);
+    console.log("Locker Column", i + 1);
+    // console.log(systemLayout[i]);
+
+    // let val = array[i];
+    testColumn = [];
+    for (let j = 0; j < systemLayout[i].length; j++) {
+      // console.log(systemLayout[i][j]);
+      let position =
+        8 * (systemLayout[i][j].cardID - 1) + (systemLayout[i][j].portID - 1);
+
+      let positionStatus =
+        statusArr[position] === undefined ? false : statusArr[position];
+      console.log(
+        "looking for position ",
+        position,
+        "which has a status of ",
+        positionStatus
+      );
+      testColumn.push(positionStatus);
+      console.log(testColumn);
+    }
+    testStatus.push(testColumn);
+  }
+  console.log(testStatus);
+};
+
 var buildSystemLayout = (lockers, numPerColumn, kioskLocationSize) => {
   let lockerSystem = [];
   let thisColumn = [];
@@ -56,51 +135,11 @@ var buildSystemLayout = (lockers, numPerColumn, kioskLocationSize) => {
     }
   });
 
+  // console.log(lockerSystem);
   return lockerSystem;
 };
 
-function LockerSystem() {
-  const [doorStatus, setDoorStatus] = useState([]);
-
-  useEffect(() => {
-    // Update the document title using the browser API
-    refreshInputs();
-  }, []);
-
-  var refreshInputs = () => {
-    axios.get(`http://localhost:3001/api/getAllInputStatus`).then((res) => {
-      let doorStatus = chunkArray(res.data[0].doorOpen, 8);
-
-      setDoorStatus({ doorStatus });
-      console.log(doorStatus);
-    });
-  };
-
-  let systemLayout = buildSystemLayout(
-    lockers,
-    numPerColumn,
-    kioskLocationSize
-  );
-
-  return (
-    <div className="App">
-      <Grid container>
-        {systemLayout.map((lockerColumn, index) => (
-          <Column
-            key={index}
-            lockerColumn={lockerColumn}
-            columnNum={index + 1}
-            doorStatus={doorStatus[index]}
-          />
-        ))}
-      </Grid>
-    </div>
-  );
-}
-
-export default LockerSystem;
-
-/**
+/**********************************************************************
  * Returns an array with arrays of the given size.
  *
  * @param myArray {Array} Array to split

@@ -6,27 +6,8 @@ import Grid from "@material-ui/core/Grid";
 // import { sizing } from "@material-ui/system";
 import "./Column.css";
 
-var openLocker = (num) => {
-  console.log("Opening Door", num);
-  let toOpen = [];
-  if (!Array.isArray(num)) {
-    toOpen.push(num - 1);
-  } else {
-    toOpen = num;
-  }
-  axios
-    .post(`http://localhost:3001/api/postOpenLock`, {
-      lock: toOpen,
-      attempts: 1,
-    })
-    .then((res) => {
-      // this.updateColors(res);
-      console.log(res);
-    });
-};
-
 function Column(props, style) {
-  console.log(props);
+  // console.log(props);
   // const layout = props.layout.split(",");
   const layout = props.lockerColumn;
 
@@ -37,7 +18,8 @@ function Column(props, style) {
       </Typography>
       {layout.map((h, index) => (
         <div
-          className={`${index === 1 ? "locker-open" : ""}`}
+          // this class is what turns the doors green when open
+          className={`${index === 20 ? "locker-open" : ""}`}
           key={index}
           style={styles["_" + h.sizeID]}
         >
@@ -45,7 +27,6 @@ function Column(props, style) {
             name={h.lockID}
             style={styles.lockerDoorButton}
             onClick={() => {
-              console.log("Open Door", h);
               openLocker(h.lockID);
             }}
           >
@@ -67,6 +48,27 @@ function Column(props, style) {
   );
 }
 
+var openLocker = (num) => {
+  console.log("Opening Door", num);
+
+  let toOpen = [];
+  if (!Array.isArray(num)) {
+    toOpen.push(num - 1);
+  } else {
+    toOpen = num;
+  }
+  axios
+    .post(`/api/postOpenLock`, {
+      lock: toOpen,
+      attempts: 1,
+    })
+    .then((res) => {
+      // this.updateColors(res);
+      console.log(res);
+      // props.setDoorOpenStatus(res.data);
+    });
+};
+
 const styles = {
   lockerOutline: {
     width: 200,
@@ -81,16 +83,11 @@ const styles = {
   },
 
   lockerDoorButton: {
-    // height: "100%",
     height: "100%",
     width: "100%",
-    // maxWidth: "30px",
-    // maxHeight: "30px",
-    // minWidth: "30px",
-    // minHeight: "30px",
   },
   _1: {
-    background: "tomato",
+    background: "#A9A9A9",
     // flexGrow: 1,
     height: "40px",
     // border: "3px solid #888888",
@@ -99,7 +96,7 @@ const styles = {
     // outlineOffset: "-6px",
   },
   _2: {
-    background: "yellow",
+    background: "#A9A9A9",
     // flexGrow: 2,
     height: "80px",
     outline: "5px solid #888888",
@@ -112,7 +109,7 @@ const styles = {
     border: "3px solid #888888",
   },
   _4: {
-    background: "blue",
+    background: "#A9A9A9",
     height: "160px",
     outline: "5px solid #888888",
     // flexGrow: 4,
