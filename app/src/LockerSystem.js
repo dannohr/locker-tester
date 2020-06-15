@@ -13,21 +13,40 @@ var numPerColumn = 15;
 var kioskLocationSize = [{ kioskAfter: 58, kioskSize: 5 }];
 
 function LockerSystem() {
-  const [doorStatus, setDoorStatus] = useState([]);
+  // doorStatusFromWago will be one big array showing status of inpurs
+  // const [doorStatusFromWago, setDoorStatusFromWago] = useState([]);
+  const [doorStatus, setDoorStatus] = useState();
+
+  // useEffect(() => {
+  //   console.log("refreshing");
+  //   refreshInputs();
+  // }, []);
 
   useEffect(() => {
-    refreshInputs();
+    const interval = setInterval(() => {
+      console.log("updating");
+      refreshInputs();
+    }, 5000);
+    return () => clearInterval(interval);
   }, []);
 
   var refreshInputs = () => {
     axios.get(`/api/getAllInputStatus`).then((res) => {
       // let doorStatus = chunkArray(res.data[0].doorOpen, 8);
-      let doorStatus = res.data[0].doorOpen;
+      let doorStatusFromWago = res.data[0].doorOpen;
+      // console.log(doorStatusFromWago);
+      // setDoorStatusFromWago({ doorStatusFromWago });
+      // console.log(doorStatusFromWago);
+      // console.log(doorStatus);
 
-      setDoorStatus({ doorStatus });
-      console.log(doorStatus);
-
-      setLockerSystemDoorStatus(doorStatus, systemLayout);
+      let doorStatus = setLockerSystemDoorStatus(
+        doorStatusFromWago,
+        systemLayout
+      );
+      // console.log(doorStatus);
+      setDoorStatus(doorStatus);
+      // console.log(doorStatusFromWago);
+      // console.log(doorStatus);
     });
   };
 
@@ -45,8 +64,7 @@ function LockerSystem() {
             key={index}
             lockerColumn={lockerColumn}
             columnNum={index + 1}
-            doorStatus={doorStatus[index]}
-            // setDoorOpenStatus={setDoorOpenStatus}
+            doorStatus={doorStatus ? doorStatus[index] : [false]}
           />
         ))}
       </Grid>
@@ -57,7 +75,7 @@ function LockerSystem() {
 export default LockerSystem;
 
 var setLockerSystemDoorStatus = (statusArr, systemLayout) => {
-  console.log(statusArr);
+  // console.log(statusArr);
 
   let testStatus = [];
   let testColumn = [];
@@ -65,7 +83,7 @@ var setLockerSystemDoorStatus = (statusArr, systemLayout) => {
   // First loop is to go through the columns
   for (let i = 0; i < systemLayout.length; i++) {
     // console.log(systemLayout);
-    console.log("Locker Column", i + 1);
+    // console.log("Locker Column", i + 1);
     // console.log(systemLayout[i]);
 
     // let val = array[i];
@@ -77,18 +95,19 @@ var setLockerSystemDoorStatus = (statusArr, systemLayout) => {
 
       let positionStatus =
         statusArr[position] === undefined ? false : statusArr[position];
-      console.log(
-        "looking for position ",
-        position,
-        "which has a status of ",
-        positionStatus
-      );
+      // console.log(
+      //   "looking for position ",
+      //   position,
+      //   "which has a status of ",
+      //   positionStatus
+      // );
       testColumn.push(positionStatus);
-      console.log(testColumn);
+      // console.log(testColumn);
     }
     testStatus.push(testColumn);
   }
-  console.log(testStatus);
+  // console.log(testStatus);
+  return testStatus;
 };
 
 var buildSystemLayout = (lockers, numPerColumn, kioskLocationSize) => {
@@ -145,15 +164,15 @@ var buildSystemLayout = (lockers, numPerColumn, kioskLocationSize) => {
  * @param myArray {Array} Array to split
  * @param chunkSize {Integer} Size of every group
  */
-function chunkArray(myArray, chunk_size) {
-  var results = [];
+// function chunkArray(myArray, chunk_size) {
+//   var results = [];
 
-  while (myArray.length) {
-    results.push(myArray.splice(0, chunk_size));
-  }
+//   while (myArray.length) {
+//     results.push(myArray.splice(0, chunk_size));
+//   }
 
-  return results;
-}
+//   return results;
+// }
 
 // // Split in group of 3 items
 // var result = chunkArray([1,2,3,4,5,6,7,8], 3);

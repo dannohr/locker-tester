@@ -10,40 +10,51 @@ function Column(props, style) {
   // console.log(props);
   // const layout = props.layout.split(",");
   const layout = props.lockerColumn;
+  const doorStatus = props.doorStatus;
+  // console.log(doorStatus);
 
   return (
     <div style={styles.lockerOutline}>
       <Typography variant="body1" style={styles.columnHeader}>
         {props.columnNum}
       </Typography>
-      {layout.map((h, index) => (
-        <div
-          // this class is what turns the doors green when open
-          className={`${index === 20 ? "locker-open" : ""}`}
-          key={index}
-          style={styles["_" + h.sizeID]}
-        >
-          <Button
-            name={h.lockID}
-            style={styles.lockerDoorButton}
-            onClick={() => {
-              openLocker(h.lockID);
-            }}
+
+      {layout.map((h, index) => {
+        // console.log(h);
+        // console.log(index);
+        // console.log(doorStatus[index] ? doorStatus[index] : false);
+        let thisDoorStatus = doorStatus[index] ? doorStatus[index] : false;
+        console.log(thisDoorStatus);
+        return (
+          <div
+            // this class is what turns the doors green when open
+
+            className={`${thisDoorStatus ? "door-open" : ""}`}
+            key={index}
+            style={styles["_" + h.sizeID]}
           >
-            <Grid container justify="space-between">
-              <Typography variant="subtitle2" align="left">
-                {h.cardID}
-              </Typography>
-              <Typography variant="h6" align="center">
-                {h.lockID}
-              </Typography>
-              <Typography variant="subtitle2" align="right">
-                {h.portID}
-              </Typography>
-            </Grid>
-          </Button>
-        </div>
-      ))}
+            <Button
+              name={h.lockID}
+              style={styles.lockerDoorButton}
+              onClick={() => {
+                openLocker(h.lockID);
+              }}
+            >
+              <Grid container justify="space-between">
+                <Typography variant="subtitle2" align="left">
+                  {h.cardID}
+                </Typography>
+                <Typography variant="h6" align="center">
+                  {h.lockID}
+                </Typography>
+                <Typography variant="subtitle2" align="right">
+                  {h.portID}
+                </Typography>
+              </Grid>
+            </Button>
+          </div>
+        );
+      })}
     </div>
   );
 }
