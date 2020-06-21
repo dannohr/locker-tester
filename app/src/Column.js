@@ -24,7 +24,7 @@ function Column(props, style) {
         // console.log(index);
         // console.log(doorStatus[index] ? doorStatus[index] : false);
         let thisDoorStatus = doorStatus[index] ? doorStatus[index] : false;
-        console.log(thisDoorStatus);
+        // console.log(thisDoorStatus);
         return (
           <div
             // this class is what turns the doors green when open

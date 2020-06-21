@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
 
 import "./LockerSystem.css";
 import Column from "./Column";
@@ -23,15 +24,18 @@ function LockerSystem() {
   // }, []);
 
   useEffect(() => {
-    const interval = setInterval(() => {
-      console.log("updating");
-      refreshInputs();
-    }, 5000);
-    return () => clearInterval(interval);
+    // refreshInputs();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    // const interval = setInterval(() => {
+    //   console.log("updating");
+    //   refreshInputs();
+    // }, 5000);
+    // return () => clearInterval(interval);
   }, []);
 
   var refreshInputs = () => {
     axios.get(`/api/getAllInputStatus`).then((res) => {
+      console.log("getting status of all");
       // let doorStatus = chunkArray(res.data[0].doorOpen, 8);
       let doorStatusFromWago = res.data[0].doorOpen;
       // console.log(doorStatusFromWago);
@@ -58,6 +62,15 @@ function LockerSystem() {
 
   return (
     <div className="App">
+      <Button
+        color="primary"
+        onClick={() => {
+          console.log("onClick");
+          refreshInputs();
+        }}
+      >
+        Refresh
+      </Button>
       <Grid container>
         {systemLayout.map((lockerColumn, index) => (
           <Column

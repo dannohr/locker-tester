@@ -22,7 +22,7 @@ export default function App() {
             <Route path="/test">
               <ModbusTest />
             </Route>
-            <Route path="/">
+            <Route exact path="/">
               <LockerSystem />
             </Route>
           </Switch>
