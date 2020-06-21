@@ -1,26 +1,34 @@
 import React from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import LockerSystem from "./LockerSystem";
-import ModbusServerSetup from "./SetupComponents/ModbusServerSetup";
+import ServerSetup from "./SetupComponents/ServerSetup";
 import ModbusTest from "./SetupComponents/ModbusTest";
-import MenuBar from "./AppBar";
+import Setup from "./Setup";
+import MenuBar from "./MenuBar";
+import Status from "./Status";
 
 import "./App.css";
 
 export default function App() {
   return (
     <div className="App">
-      <MenuBar />
       <Router>
+        <MenuBar />
         <div>
           {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
           <Switch>
             <Route path="/server">
-              <ModbusServerSetup />
+              <ServerSetup />
             </Route>
             <Route path="/test">
               <ModbusTest />
+            </Route>
+            <Route path="/setup">
+              <Setup />
+            </Route>
+            <Route path="/status">
+              <Status />
             </Route>
             <Route exact path="/">
               <LockerSystem />
@@ -31,14 +39,3 @@ export default function App() {
     </div>
   );
 }
-
-// function App() {
-//   return (
-//     <div className="App">
-//       <MenuBar />
-//       <LockerSystem />
-//     </div>
-//   );
-// }
-
-// export default App;
