@@ -1,6 +1,5 @@
 import React from "react";
 import { Link as RouterLink } from "react-router-dom";
-import { createBrowserHistory } from "history";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -13,8 +12,6 @@ import Link from "@material-ui/core/Link";
 
 import MenuItem from "@material-ui/core/MenuItem";
 import Menu from "@material-ui/core/Menu";
-
-const history = createBrowserHistory();
 
 const useStyles = makeStyles((theme) => ({
   root: {

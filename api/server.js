@@ -25,6 +25,7 @@ const lockModbusCtrl = require("./ctrl/lockModbusCtrl.js");
 const lockerCtrl = require("./ctrl/lockerCtrl.js");
 const databaseCtrl = require("./ctrl/databaseCtrl.js");
 const shutDownCtrl = require("./ctrl/shutDownCtrl.js");
+const systemCtrl = require("./ctrl/systemCtrl");
 
 app.get("/api/getLockers", lockerCtrl.getAllLockers);
 
@@ -36,6 +37,8 @@ app.post("/api/modbus/postMusbusServer", databaseCtrl.postMusbusServer);
 
 app.get("/api/server/shutdown", shutDownCtrl.shutDownComputer);
 app.get("/api/server/reboot", shutDownCtrl.rebootComputer);
+
+app.get("/api/status", systemCtrl.getSystemStatus);
 
 app.get("/api/hello", (req, res) => {
   res.send({ express: "Yep. Modbus System Connected" });
