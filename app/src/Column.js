@@ -75,7 +75,7 @@ var openLocker = (num) => {
     })
     .then((res) => {
       // this.updateColors(res);
-      console.log(res);
+      console.log(res.data);
       // props.setDoorOpenStatus(res.data);
     });
 };

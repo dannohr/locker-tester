@@ -65,7 +65,7 @@ function LockerSystem() {
       <Button
         color="primary"
         onClick={() => {
-          console.log("onClick");
+          console.log("-- Refreshing --");
           refreshInputs();
         }}
       >
