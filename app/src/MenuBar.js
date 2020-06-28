@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function MenuBar() {
+export default function MenuBar(props) {
   const classes = useStyles();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -41,12 +41,15 @@ export default function MenuBar() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  console.log(props);
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="h6" align="left" className={classes.title}>
+            {props.activeModbusServer}
+          </Typography>
+          <Typography variant="h6" align="left" className={classes.title}>
             Locker Tester
           </Typography>
 
@@ -80,7 +83,7 @@ export default function MenuBar() {
                   Status
                 </MenuItem>
               </Link>
-              <Link component={RouterLink} to="/status">
+              <Link component={RouterLink} to="/server">
                 <MenuItem onClick={handleClose} className={classes.link}>
                   WAGO Setup
                 </MenuItem>

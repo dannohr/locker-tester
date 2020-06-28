@@ -5,6 +5,7 @@ require("dotenv").config();
 
 const app = express();
 const port = process.env.SERVER_PORT || 5000;
+const routes = require("./routes");
 
 // Body Parser Middleware
 app.use(bodyParser.json());
@@ -21,24 +22,26 @@ app.use(function (req, res, next) {
   next();
 });
 
-const lockModbusCtrl = require("./ctrl/lockModbusCtrl.js");
-const lockerCtrl = require("./ctrl/lockerCtrl.js");
-const databaseCtrl = require("./ctrl/databaseCtrl.js");
-const shutDownCtrl = require("./ctrl/shutDownCtrl.js");
-const systemCtrl = require("./ctrl/systemCtrl");
+app.use(process.env.API_ENDPOINT, routes);
 
-app.get("/api/getLockers", lockerCtrl.getAllLockers);
+// const lockModbusCtrl = require("./ctrl/lockModbusCtrl.js");
+// const lockerCtrl = require("./ctrl/lockerCtrl.js");
+// const databaseCtrl = require("./ctrl/databaseCtrl.js");
+// const shutDownCtrl = require("./ctrl/shutDownCtrl.js");
+// const systemCtrl = require("./ctrl/systemCtrl");
 
-app.get("/api/getAllInputStatus", lockModbusCtrl.getAllInputStatus);
-app.post("/api/postOpenLock", lockModbusCtrl.postOpenLock);
+// app.get("/api/getLockers", lockerCtrl.getAllLockers);
 
-app.get("/api/modbus/getMusbusServer", databaseCtrl.getMusbusServer);
-app.post("/api/modbus/postMusbusServer", databaseCtrl.postMusbusServer);
+// app.get("/api/getAllInputStatus", lockModbusCtrl.getAllInputStatus);
+// app.post("/api/postOpenLock", lockModbusCtrl.postOpenLock);
 
-app.get("/api/server/shutdown", shutDownCtrl.shutDownComputer);
-app.get("/api/server/reboot", shutDownCtrl.rebootComputer);
+// app.get("/api/modbus/getMusbusServer", databaseCtrl.getMusbusServer);
+// app.post("/api/modbus/postMusbusServer", databaseCtrl.postMusbusServer);
 
-app.get("/api/status", systemCtrl.getSystemStatus);
+// app.get("/api/server/shutdown", shutDownCtrl.shutDownComputer);
+// app.get("/api/server/reboot", shutDownCtrl.rebootComputer);
+
+// app.get("/api/status", systemCtrl.getSystemStatus);
 
 app.get("/api/hello", (req, res) => {
   res.send({ express: "Yep. Modbus System Connected" });

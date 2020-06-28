@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import LockerSystem from "./LockerSystem";
 import ServerSetup from "./SetupComponents/ServerSetup";
@@ -10,10 +10,12 @@ import Status from "./Status";
 import "./App.css";
 
 export default function App() {
+  const [activeModbusServer, setServer] = useState("1,2,3,4");
+
   return (
     <div className="App">
       <Router>
-        <MenuBar />
+        <MenuBar activeModbusServer={activeModbusServer} />
         <div>
           {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}

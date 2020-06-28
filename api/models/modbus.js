@@ -1,19 +1,18 @@
 "use strict";
 module.exports = (sequelize, DataTypes) => {
-  const OnDemand = sequelize.define(
-    "OnDemand",
+  const modbus = sequelize.define(
+    "modbus",
     {
       id: {
         primaryKey: true,
         type: DataTypes.INTEGER,
-        autoIncrement: true
+        autoIncrement: true,
       },
 
-      readTime: DataTypes.DATE,
-      previousDate: DataTypes.DATEONLY,
-      currentMeterRead: DataTypes.DECIMAL(12, 4),
-      previousMeterRead: DataTypes.DECIMAL(12, 4),
-      consumption: DataTypes.DECIMAL(8, 4)
+      ip: DataTypes.TEXT,
+      port: DataTypes.INTEGER,
+      numcards: DataTypes.INTEGER,
+      active: DataTypes.INTEGER,
     },
     {}
   );
@@ -26,5 +25,5 @@ module.exports = (sequelize, DataTypes) => {
   //   Daily.belongsTo(models.Address, {});
   // };
 
-  return OnDemand;
+  return modbus;
 };

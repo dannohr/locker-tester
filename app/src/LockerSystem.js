@@ -34,7 +34,7 @@ function LockerSystem() {
   }, []);
 
   var refreshInputs = () => {
-    axios.get(`/api/getAllInputStatus`).then((res) => {
+    axios.get(`/api/v1/getAllInputStatus`).then((res) => {
       console.log("getting status of all");
       // let doorStatus = chunkArray(res.data[0].doorOpen, 8);
       let doorStatusFromWago = res.data[0].doorOpen;

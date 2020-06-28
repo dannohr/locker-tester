@@ -177,7 +177,7 @@ var connect = function () {
 
     // let modbusIp = rows[0].ip;
     // let modbusPort = rows[0].port;
-    let modbusIp = "7.7.7.100";
+    let modbusIp = "192.168.1.83";
 
     let modbusPort = 502;
 

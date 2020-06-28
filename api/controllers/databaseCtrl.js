@@ -1,7 +1,8 @@
 const sqlite3 = require("sqlite3").verbose();
 
 // open the database
-let db = new sqlite3.Database("./db/lockers.db");
+// let db = new sqlite3.Database("./db/lockers.db");
+const db = require("../models/index");
 
 let modbusSQL = `SELECT * FROM modbus`;
 let lockerSQL = `SELECT * FROM lockers`;

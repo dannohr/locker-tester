@@ -1,16 +1,19 @@
 "use strict";
 module.exports = (sequelize, DataTypes) => {
-  const BillPeriod = sequelize.define(
-    "BillPeriod",
+  const lockerSystem = sequelize.define(
+    "lockerSystem",
     {
       id: {
         primaryKey: true,
         type: DataTypes.INTEGER,
-        autoIncrement: true
+        autoIncrement: true,
       },
 
-      start: DataTypes.DATEONLY,
-      end: DataTypes.DATEONLY
+      lockerSystemId: DataTypes.INTEGER,
+      cardNum: DataTypes.INTEGER,
+      portNum: DataTypes.INTEGER,
+      lockNum: DataTypes.INTEGER,
+      size: DataTypes.INTEGER,
     },
     {}
   );
@@ -23,5 +26,5 @@ module.exports = (sequelize, DataTypes) => {
   //   Daily.belongsTo(models.Address, {});
   // };
 
-  return BillPeriod;
+  return lockerSystem;
 };
