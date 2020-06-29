@@ -41,7 +41,7 @@ export default function MenuBar(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-
+  console.log(props);
   return (
     <div className={classes.root}>
       <AppBar position="static">
@@ -50,7 +50,7 @@ export default function MenuBar(props) {
             WAGO: {props.activeModbusServer.ip}
           </Typography>
           <Typography variant="h6" align="left" className={classes.title}>
-            Locker Tester
+            {props.activeLockerSystem.systemName} Tester
           </Typography>
 
           <div>

@@ -13,21 +13,31 @@ import "./App.css";
 
 export default function App() {
   const [activeModbusServer, setServer] = useState({ ip: "1.2.3.4" });
+  const [activeLockerSystem, setLockerSystem] = useState({ ip: "1.2.3.4" });
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchModbusData = async () => {
       const result = await axios("/api/v1/activeModbusServer");
       // console.log(result.data[0]);
       setServer(result.data[0]);
     };
+    const fetchLockerData = async () => {
+      const result = await axios("/api/v1/activeLockerSystem");
+      console.log(result.data[0]);
+      setLockerSystem(result.data[0]);
+    };
 
-    fetchData();
+    fetchModbusData();
+    fetchLockerData();
   }, []);
 
   return (
     <div className="App">
       <Router>
-        <MenuBar activeModbusServer={activeModbusServer} />
+        <MenuBar
+          activeModbusServer={activeModbusServer}
+          activeLockerSystem={activeLockerSystem}
+        />
         <div>
           {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}

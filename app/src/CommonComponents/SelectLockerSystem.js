@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import axios from "axios";
 
 import CommonTable from "../CommonComponents/CommonTable";
@@ -6,13 +6,13 @@ import CommonTable from "../CommonComponents/CommonTable";
 export default function SelectLockerSystem(props) {
   const [data, setData] = useState([]);
   const [selectedRow, setSelectedRow] = useState(null);
-
+  console.log(selectedRow);
   let columns = [
     { title: "Active", field: "active" },
     { title: "Name", field: "systemName" },
     {
       title: "Description",
-      field: "Description",
+      field: "description",
     },
     { title: "# of Cards", field: "numOfCards", type: "numeric" },
     { title: "# of Columns", field: "numOfColumns", type: "numeric" },
@@ -31,8 +31,8 @@ export default function SelectLockerSystem(props) {
   //     fetchData();
   //   }, []);
 
-  console.log(data);
-  console.log(props);
+  // console.log(data);
+  // console.log(props);
   return (
     <CommonTable
       title="Locker Systems"

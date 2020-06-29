@@ -13,6 +13,7 @@ router.put("/modbus/:id", modbusServerCtrl.update);
 router.delete("/modbus/:id", modbusServerCtrl.delete);
 
 router.get("/activeModbusServer", modbusServerCtrl.getActiveServer);
+router.get("/activeLockerSystem", lockerSystemCtrl.getActiveServer);
 
 router.get("/getAllInputStatus", lockModbusCtrl.getAllInputStatus);
 router.post("/postOpenLock", lockModbusCtrl.postOpenLock);

@@ -10,7 +10,7 @@ module.exports = (sequelize, DataTypes) => {
       },
 
       systemName: DataTypes.TEXT,
-      Description: DataTypes.TEXT,
+      description: DataTypes.TEXT,
       numOfCards: DataTypes.INTEGER,
       numOfColumns: DataTypes.INTEGER,
       numOfDoors: DataTypes.INTEGER,
