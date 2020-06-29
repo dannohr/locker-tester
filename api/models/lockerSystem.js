@@ -9,11 +9,12 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
       },
 
-      lockerSystemId: DataTypes.INTEGER,
-      cardNum: DataTypes.INTEGER,
-      portNum: DataTypes.INTEGER,
-      lockNum: DataTypes.INTEGER,
-      size: DataTypes.INTEGER,
+      systemName: DataTypes.TEXT,
+      Description: DataTypes.TEXT,
+      numOfCards: DataTypes.INTEGER,
+      numOfColumns: DataTypes.INTEGER,
+      numOfDoors: DataTypes.INTEGER,
+      active: DataTypes.INTEGER,
     },
     {}
   );

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
+import axios from "axios";
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom";
 import LockerSystem from "./LockerSystem";
 import ServerSetup from "./SetupComponents/ServerSetup";
+import LockerSystemSetup from "./SetupComponents/LockerSystemSetup";
 import ModbusTest from "./SetupComponents/ModbusTest";
 import Setup from "./Setup";
 import MenuBar from "./MenuBar";
@@ -10,7 +12,17 @@ import Status from "./Status";
 import "./App.css";
 
 export default function App() {
-  const [activeModbusServer, setServer] = useState("1,2,3,4");
+  const [activeModbusServer, setServer] = useState({ ip: "1.2.3.4" });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios("/api/v1/activeModbusServer");
+      // console.log(result.data[0]);
+      setServer(result.data[0]);
+    };
+
+    fetchData();
+  }, []);
 
   return (
     <div className="App">
@@ -31,6 +43,9 @@ export default function App() {
             </Route>
             <Route path="/status">
               <Status />
+            </Route>
+            <Route path="/lockersystemsetup">
+              <LockerSystemSetup />
             </Route>
             <Route exact path="/">
               <LockerSystem />

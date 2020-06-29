@@ -41,13 +41,13 @@ export default function MenuBar(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  console.log(props);
+
   return (
     <div className={classes.root}>
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" align="left" className={classes.title}>
-            {props.activeModbusServer}
+            WAGO: {props.activeModbusServer.ip}
           </Typography>
           <Typography variant="h6" align="left" className={classes.title}>
             Locker Tester
@@ -80,7 +80,7 @@ export default function MenuBar(props) {
             >
               <Link component={RouterLink} to="/status">
                 <MenuItem onClick={handleClose} className={classes.link}>
-                  Status
+                  Network Status
                 </MenuItem>
               </Link>
               <Link component={RouterLink} to="/server">
@@ -88,14 +88,14 @@ export default function MenuBar(props) {
                   WAGO Setup
                 </MenuItem>
               </Link>
-              <Link component={RouterLink} to="/status">
+              <Link component={RouterLink} to="/lockersystemsetup">
                 <MenuItem onClick={handleClose} className={classes.link}>
-                  Locker Setup
+                  Locker System Setup
                 </MenuItem>
               </Link>
               <Link component={RouterLink} to="/">
                 <MenuItem onClick={handleClose} className={classes.link}>
-                  Lockers
+                  Operate Lockers
                 </MenuItem>
               </Link>
             </Menu>

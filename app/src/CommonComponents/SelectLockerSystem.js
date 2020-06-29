@@ -3,38 +3,52 @@ import axios from "axios";
 
 import CommonTable from "../CommonComponents/CommonTable";
 
-export default function ServerSetup() {
+export default function SelectLockerSystem(props) {
   const [data, setData] = useState([]);
-  // const [columns, setColumns] = useState([]);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios("http://localhost:3001/api/v1/modbus");
-
-      setData(result.data);
-    };
-
-    fetchData();
-  }, []);
+  const [selectedRow, setSelectedRow] = useState(null);
 
   let columns = [
-    { title: "IP Address", field: "ip" },
+    { title: "Active", field: "active" },
+    { title: "Name", field: "systemName" },
     {
-      title: "port",
-      field: "port",
+      title: "Description",
+      field: "Description",
     },
-    { title: "# of Cards", field: "numcards", type: "numeric" },
-    {
-      title: "Active",
-      field: "active",
-    },
+    { title: "# of Cards", field: "numOfCards", type: "numeric" },
+    { title: "# of Columns", field: "numOfColumns", type: "numeric" },
+    { title: "# of Doors", field: "numOfDoors", type: "numeric" },
   ];
 
+  // const [columns, setColumns] = useState([]);
+
+  //   useEffect(() => {
+  //     const fetchData = async () => {
+  //       const result = await axios("http://localhost:3001/api/v1/lockersystem");
+  //       console.log(result.data);
+  //       setData(result.data);
+  //     };
+
+  //     fetchData();
+  //   }, []);
+
+  console.log(data);
+  console.log(props);
   return (
     <CommonTable
-      title="WAGO Devices"
+      title="Locker Systems"
       columns={columns}
-      data={data}
+      data={props.lockerSystems}
+      onRowClick={(evt, selectedRow) =>
+        setSelectedRow(selectedRow.tableData.id)
+      }
+      options={{
+        rowStyle: (rowData) => ({
+          backgroundColor:
+            // selectedRow === rowData.tableData.id ? "#EEE" : "#FFF",
+            rowData.active === 1 ? "#f5ff89" : "#FFF",
+        }),
+        padding: "dense",
+      }}
       editable={{
         onRowAdd: (newData) =>
           new Promise((resolve, reject) => {
