@@ -69,7 +69,7 @@ var openLocker = (num) => {
     toOpen = num;
   }
   axios
-    .post(`/api/postOpenLock`, {
+    .post(`/api/v1/postOpenLock`, {
       lock: toOpen,
       attempts: 1,
     })
