@@ -41,7 +41,7 @@ export default function MenuBar(props) {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  console.log(props);
+  // console.log(props);
   return (
     <div className={classes.root}>
       <AppBar position="static">

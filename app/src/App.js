@@ -58,7 +58,7 @@ export default function App() {
               <LockerSystemSetup />
             </Route>
             <Route exact path="/">
-              <LockerSystem />
+              <LockerSystem activeLockerSystem={activeLockerSystem} />
             </Route>
           </Switch>
         </div>

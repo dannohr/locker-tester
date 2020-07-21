@@ -64,7 +64,7 @@ var openLocker = (num) => {
 
   let toOpen = [];
   if (!Array.isArray(num)) {
-    toOpen.push(num - 1);
+    toOpen.push(num);
   } else {
     toOpen = num;
   }

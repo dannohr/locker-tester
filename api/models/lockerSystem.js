@@ -15,6 +15,7 @@ module.exports = (sequelize, DataTypes) => {
       numOfColumns: DataTypes.INTEGER,
       numOfDoors: DataTypes.INTEGER,
       active: DataTypes.INTEGER,
+      columnDoorSpacing: DataTypes.INTEGER,
     },
     {}
   );

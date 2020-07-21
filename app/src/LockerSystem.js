@@ -1,86 +1,84 @@
 import React, { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
-import Button from "@material-ui/core/Button";
 
 import "./LockerSystem.css";
 import Column from "./Column";
-import axios from "axios";
+// import axios from "axios";
+
+import socketIOClient from "socket.io-client";
+const ENDPOINT = "http://192.168.1.67:3006";
 
 var lockers = require("./lockers");
-var numPerColumn = 15;
 
 // first number is the door number kiosk is immediately after
 // second number is the size of the kiosk door
 var kioskLocationSize = [{ kioskAfter: 58, kioskSize: 5 }];
 
-function LockerSystem() {
-  // doorStatusFromWago will be one big array showing status of inpurs
-  // const [doorStatusFromWago, setDoorStatusFromWago] = useState([]);
-  const [doorStatus, setDoorStatus] = useState();
+function LockerSystem(props) {
+  // console.log(props);
+  var columnDoorSpacing = 15; //props.activeLockerSystem.columnDoorSpacing;
+  // console.log(columnDoorSpacing);
 
-  // useEffect(() => {
-  //   console.log("refreshing");
-  //   refreshInputs();
-  // }, []);
+  const [doorStatus, setDoorStatus] = useState();
+  const [ioStatus, setIoStatus] = useState(false);
 
   useEffect(() => {
-    // refreshInputs();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    // const interval = setInterval(() => {
-    //   console.log("updating");
-    //   refreshInputs();
-    // }, 5000);
-    // return () => clearInterval(interval);
-  }, []);
+    const socket = socketIOClient(ENDPOINT);
 
-  var refreshInputs = () => {
-    axios.get(`/api/v1/getAllInputStatus`).then((res) => {
-      console.log("getting status of all");
-      // let doorStatus = chunkArray(res.data[0].doorOpen, 8);
-      let doorStatusFromWago = res.data[0].doorOpen;
-      // console.log(doorStatusFromWago);
-      // setDoorStatusFromWago({ doorStatusFromWago });
-      // console.log(doorStatusFromWago);
-      // console.log(doorStatus);
-
-      let doorStatus = setLockerSystemDoorStatus(
-        doorStatusFromWago,
-        systemLayout
-      );
-      // console.log(doorStatus);
-      setDoorStatus(doorStatus);
-      // console.log(doorStatusFromWago);
-      // console.log(doorStatus);
+    socket.on("connect", function () {
+      setIoStatus(true);
     });
-  };
+
+    // this is what makes the polling start
+    socket.emit("readDiscreteInputs", {
+      unit: 1,
+      address: 0,
+      length: 6 * 8,
+      interval: 1000,
+    });
+
+    //this is what makes the polling start
+    // socket.emit("readCoils", {
+    //   unit: 1,
+    //   address: 0,
+    //   length: 16,
+    //   interval: 1000,
+    // });
+
+    //this is what gets the polling data and updates state
+    socket.on("data", (data) => {
+      // console.log(data);
+
+      let doorStatus = setLockerSystemDoorStatus(data.data, systemLayout);
+      setDoorStatus(doorStatus);
+    });
+
+    // CLEAN UP THE EFFECT
+    return () => socket.disconnect();
+    //
+  }, []);
 
   let systemLayout = buildSystemLayout(
     lockers,
-    numPerColumn,
+    columnDoorSpacing,
     kioskLocationSize
   );
 
   return (
     <div className="App">
-      <Button
-        color="primary"
-        onClick={() => {
-          console.log("-- Refreshing --");
-          refreshInputs();
-        }}
-      >
-        Refresh
-      </Button>
-      <Grid container>
-        {systemLayout.map((lockerColumn, index) => (
-          <Column
-            key={index}
-            lockerColumn={lockerColumn}
-            columnNum={index + 1}
-            doorStatus={doorStatus ? doorStatus[index] : [false]}
-          />
-        ))}
-      </Grid>
+      {ioStatus ? <p> Connected </p> : <p> NOT CONNECTED </p>}
+      {props.activeLockerSystem ? (
+        <Grid container>
+          {systemLayout.map((lockerColumn, index) => (
+            <Column
+              key={index}
+              lockerColumn={lockerColumn}
+              columnNum={index + 1}
+              doorStatus={doorStatus ? doorStatus[index] : [false]}
+            />
+          ))}
+        </Grid>
+      ) : null}
     </div>
   );
 }
@@ -88,42 +86,28 @@ function LockerSystem() {
 export default LockerSystem;
 
 var setLockerSystemDoorStatus = (statusArr, systemLayout) => {
-  // console.log(statusArr);
-
   let testStatus = [];
   let testColumn = [];
 
   // First loop is to go through the columns
   for (let i = 0; i < systemLayout.length; i++) {
-    // console.log(systemLayout);
-    // console.log("Locker Column", i + 1);
-    // console.log(systemLayout[i]);
-
-    // let val = array[i];
     testColumn = [];
     for (let j = 0; j < systemLayout[i].length; j++) {
-      // console.log(systemLayout[i][j]);
       let position =
         8 * (systemLayout[i][j].cardID - 1) + (systemLayout[i][j].portID - 1);
 
       let positionStatus =
         statusArr[position] === undefined ? false : statusArr[position];
-      // console.log(
-      //   "looking for position ",
-      //   position,
-      //   "which has a status of ",
-      //   positionStatus
-      // );
+
       testColumn.push(positionStatus);
-      // console.log(testColumn);
     }
     testStatus.push(testColumn);
   }
-  // console.log(testStatus);
+
   return testStatus;
 };
 
-var buildSystemLayout = (lockers, numPerColumn, kioskLocationSize) => {
+var buildSystemLayout = (lockers, columnDoorSpacing, kioskLocationSize) => {
   let lockerSystem = [];
   let thisColumn = [];
   let lockersCount = 0;
@@ -132,10 +116,10 @@ var buildSystemLayout = (lockers, numPerColumn, kioskLocationSize) => {
   lockers.forEach((locker, index) => {
     // console.log("working on door number", locker.lockID);
     // console.log("lockersCount is", lockersCount);
-    // console.log("numPerColumn is", numPerColumn);
+    // console.log("columnDoorSpacing is", columnDoorSpacing);
 
     // build the individual columns.  Push next door opening into array until size limit reached
-    if (lockersCount < numPerColumn) {
+    if (lockersCount < columnDoorSpacing) {
       // console.log("pushing", locker, "into column");
       thisColumn.push(locker);
 
@@ -157,8 +141,11 @@ var buildSystemLayout = (lockers, numPerColumn, kioskLocationSize) => {
 
     lockersCount += locker.sizeID;
 
-    // when numPerColumn is reached, put column into lockerSystem and start over
-    if (lockersCount >= numPerColumn || index === totalNumOfLocketDoors - 1) {
+    // when columnDoorSpacing is reached, put column into lockerSystem and start over
+    if (
+      lockersCount >= columnDoorSpacing ||
+      index === totalNumOfLocketDoors - 1
+    ) {
       lockerSystem.push(thisColumn);
 
       // reset locker variables to start building the next column
