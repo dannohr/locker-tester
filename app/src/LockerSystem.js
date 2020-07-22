@@ -6,7 +6,7 @@ import Column from "./Column";
 // import axios from "axios";
 
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://192.168.1.67:3006";
+const ENDPOINT = "http://127.0.0.1:3006";
 
 var lockers = require("./lockers");
 
@@ -47,7 +47,7 @@ function LockerSystem(props) {
 
     //this is what gets the polling data and updates state
     socket.on("data", (data) => {
-      // console.log(data);
+      console.log(data);
 
       let doorStatus = setLockerSystemDoorStatus(data.data, systemLayout);
       setDoorStatus(doorStatus);

@@ -1,7 +1,7 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 var program = require("commander");
-var modbusServer = require("./modbusIO");
+var modbusServer = require("./node_modules/modbus-ws/server");
 
 require("dotenv").config();
 
@@ -31,11 +31,11 @@ app.get("/api/hello", (req, res) => {
 });
 
 let options = {
-  tcpPort: port,
+  tcpport: 3006,
   ip: "192.168.1.83",
-  test: true,
+  test: false,
   noCache: true,
-  noHttp: true,
+  noHttp: false,
 };
 
 modbusServer.start(options);
