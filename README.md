@@ -69,3 +69,7 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 
 git fetch --all
 git reset --hard origin/master
+
+git add .
+git commit -am "your commit message"
+git push origin master
