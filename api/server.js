@@ -1,7 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-var program = require("commander");
-var modbusServer = require("./node_modules/modbus-ws/server");
+const startModbusIO = require("./modbusIO");
 
 require("dotenv").config();
 
@@ -30,14 +29,6 @@ app.get("/api/hello", (req, res) => {
   res.send({ express: "Yep. Modbus System Connected" });
 });
 
-let options = {
-  tcpport: 3006,
-  ip: "192.168.1.83",
-  test: false,
-  noCache: true,
-  noHttp: false,
-};
+startModbusIO.startModbusIO();
 
-modbusServer.start(options);
-
-app.listen(port, () => console.log(`Listening on port ${port}`));
+app.listen(port, () => console.log(`API listening on port ${port}`));

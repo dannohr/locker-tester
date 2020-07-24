@@ -28,13 +28,13 @@ module.exports = {
   },
 
   getActiveServer(req, res) {
-    console.log("getting active");
+    // console.log("getting active");
     return db.lockerSystem
       .findAll({
         where: { active: 1 },
       })
       .then((activity) => {
-        console.log(activity);
+        // console.log(activity);
         if (!activity) {
           return res.status(404).send({
             message: "activity Not Found",
