@@ -16,6 +16,8 @@ module.exports = (sequelize, DataTypes) => {
       numOfDoors: DataTypes.INTEGER,
       active: DataTypes.INTEGER,
       columnDoorSpacing: DataTypes.INTEGER,
+      kioskAfterDoor: DataTypes.INTEGER,
+      kioskSize: DataTypes.INTEGER,
     },
     {}
   );

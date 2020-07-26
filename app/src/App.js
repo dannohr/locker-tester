@@ -13,12 +13,12 @@ import "./App.css";
 
 export default function App() {
   const [activeModbusServer, setServer] = useState({ ip: "1.2.3.4" });
-  const [activeLockerSystem, setLockerSystem] = useState({ ip: "1.2.3.4" });
+  const [activeLockerSystem, setLockerSystem] = useState(null);
 
   useEffect(() => {
     const fetchModbusData = async () => {
       const result = await axios("/api/v1/activeModbusServer");
-      // console.log(result.data[0]);
+      console.log(result.data[0]);
       setServer(result.data[0]);
     };
     const fetchLockerData = async () => {
@@ -34,10 +34,13 @@ export default function App() {
   return (
     <div className="App">
       <Router>
-        <MenuBar
-          activeModbusServer={activeModbusServer}
-          activeLockerSystem={activeLockerSystem}
-        />
+        {activeLockerSystem ? (
+          <MenuBar
+            activeModbusServer={activeModbusServer}
+            activeLockerSystem={activeLockerSystem}
+          />
+        ) : null}
+
         <div>
           {/* A <Switch> looks through its children <Route>s and
             renders the first one that matches the current URL. */}
@@ -58,7 +61,9 @@ export default function App() {
               <LockerSystemSetup />
             </Route>
             <Route exact path="/">
-              <LockerSystem activeLockerSystem={activeLockerSystem} />
+              {activeLockerSystem ? (
+                <LockerSystem activeLockerSystem={activeLockerSystem} />
+              ) : null}
             </Route>
           </Switch>
         </div>

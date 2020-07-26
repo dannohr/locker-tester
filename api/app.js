@@ -1,11 +1,11 @@
 const express = require("express");
 const bodyParser = require("body-parser");
-const startModbusIO = require("./modbusIO");
+// const startModbusIO = require("./modbusIO");
 
 require("dotenv").config();
 
 const app = express();
-const port = process.env.SERVER_PORT || 5000;
+// const port = process.env.SERVER_PORT || 5000;
 const routes = require("./routes");
 
 // Body Parser Middleware
@@ -29,6 +29,8 @@ app.get("/api/hello", (req, res) => {
   res.send({ express: "Yep. Modbus System Connected" });
 });
 
-startModbusIO.startModbusIO();
+// startModbusIO.startModbusIO();
 
-app.listen(port, () => console.log(`API listening on port ${port}`));
+// app.listen(port, () => console.log(`API listening on port ${port}`));
+
+module.exports = app;

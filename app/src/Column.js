@@ -1,5 +1,4 @@
 import React from "react";
-import axios from "axios";
 import Typography from "@material-ui/core/Typography";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
@@ -7,29 +6,26 @@ import Grid from "@material-ui/core/Grid";
 import "./Column.css";
 
 function Column(props, style) {
-  // console.log(props);
-  // const layout = props.layout.split(",");
   const layout = props.lockerColumn;
   const doorStatus = props.doorStatus;
   // console.log(doorStatus);
+  console.log(doorStatus);
 
   return (
     <div style={styles.lockerOutline}>
       <Typography variant="body1" style={styles.columnHeader}>
-        {props.columnNum}
+        Column {props.columnNum}
       </Typography>
-
       {layout.map((h, index) => {
-        // console.log(h);
-        // console.log(index);
-        // console.log(doorStatus[index] ? doorStatus[index] : false);
-        let thisDoorStatus = doorStatus[index] ? doorStatus[index] : false;
+        // console.log(doorStatus[index].modbusDoorStatus);
+        let thisDoorModbusStatus = doorStatus[index]
+          ? doorStatus[index].modbusDoorStatus
+          : false;
         // console.log(thisDoorStatus);
         return (
           <div
             // this class is what turns the doors green when open
-
-            className={`${thisDoorStatus ? "door-open" : ""}`}
+            className={`${thisDoorModbusStatus ? "door-open" : ""}`}
             key={index}
             style={styles["_" + h.sizeID]}
           >
@@ -37,7 +33,7 @@ function Column(props, style) {
               name={h.lockID}
               style={styles.lockerDoorButton}
               onClick={() => {
-                openLocker(h.lockID);
+                props.openLocker(h.lockID);
               }}
             >
               <Grid container justify="space-between">
@@ -59,26 +55,26 @@ function Column(props, style) {
   );
 }
 
-var openLocker = (num) => {
-  console.log("Opening Door", num);
+// var openLocker = (num) => {
+//   console.log("Opening Door", num);
 
-  let toOpen = [];
-  if (!Array.isArray(num)) {
-    toOpen.push(num);
-  } else {
-    toOpen = num;
-  }
-  axios
-    .post(`/api/v1/postOpenLock`, {
-      lock: toOpen,
-      attempts: 1,
-    })
-    .then((res) => {
-      // this.updateColors(res);
-      console.log(res.data);
-      // props.setDoorOpenStatus(res.data);
-    });
-};
+//   let toOpen = [];
+//   if (!Array.isArray(num)) {
+//     toOpen.push(num);
+//   } else {
+//     toOpen = num;
+//   }
+//   axios
+//     .post(`/api/v1/postOpenLock`, {
+//       lock: toOpen,
+//       attempts: 1,
+//     })
+//     .then((res) => {
+//       // this.updateColors(res);
+//       console.log(res.data);
+//       // props.setDoorOpenStatus(res.data);
+//     });
+// };
 
 const styles = {
   lockerOutline: {
@@ -89,7 +85,7 @@ const styles = {
     flexDirection: "column",
   },
   columnHeader: {
-    color: "white",
+    color: "black",
     marginBottom: "5px",
   },
 

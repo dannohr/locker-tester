@@ -1,25 +1,50 @@
 import React, { useState, useEffect } from "react";
 import Grid from "@material-ui/core/Grid";
+import Button from "@material-ui/core/Button";
+import axios from "axios";
 
 import "./LockerSystem.css";
 import Column from "./Column";
-// import axios from "axios";
 
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://127.0.0.1:3006";
+// const ENDPOINT = "http://127.0.0.1:3006";
+const ENDPOINT = "http://192.168.1.67:3006";
+// const ENDPOINT = "http://127.0.0.1:3000/io";
+// const ENDPOINT = "/io";
 
 var lockers = require("./lockers");
 
 // first number is the door number kiosk is immediately after
 // second number is the size of the kiosk door
-var kioskLocationSize = [{ kioskAfter: 58, kioskSize: 5 }];
+// var kioskLocationSize = [{ kioskAfter: 58, kioskSize: 5 }];
+
+let buttonStyle = {
+  maxWidth: "200px",
+  maxHeight: "75px",
+  minWidth: "200px",
+  minHeight: "75px",
+  margin: "5px",
+};
 
 function LockerSystem(props) {
   // console.log(props);
-  var columnDoorSpacing = 15; //props.activeLockerSystem.columnDoorSpacing;
-  // console.log(columnDoorSpacing);
 
-  const [doorStatus, setDoorStatus] = useState();
+  var kioskLocationSize = [
+    {
+      kioskAfter: props.activeLockerSystem.kioskAfterDoor,
+      kioskSize: props.activeLockerSystem.kioskSize,
+    },
+  ];
+  var columnDoorSpacing = props.activeLockerSystem.columnDoorSpacing;
+
+  let systemLayout = buildSystemLayout(
+    lockers,
+    columnDoorSpacing,
+    kioskLocationSize
+  );
+
+  const [doorStatus, setdoorStatus] = useState();
+  const [doorOpenAttemptStatus, setDoorOpenAttemptStatus] = useState();
   const [ioStatus, setIoStatus] = useState(false);
 
   useEffect(() => {
@@ -34,47 +59,79 @@ function LockerSystem(props) {
       unit: 1,
       address: 0,
       length: 6 * 8,
-      interval: 1000,
+      interval: 10000,
     });
-
-    //this is what makes the polling start
-    // socket.emit("readCoils", {
-    //   unit: 1,
-    //   address: 0,
-    //   length: 16,
-    //   interval: 1000,
-    // });
 
     //this is what gets the polling data and updates state
     socket.on("data", (data) => {
-      console.log(data);
+      // console.log(data);
 
       let doorStatus = setLockerSystemDoorStatus(data.data, systemLayout);
-      setDoorStatus(doorStatus);
+      setdoorStatus(doorStatus);
     });
 
     // CLEAN UP THE EFFECT
     return () => socket.disconnect();
     //
-  }, []);
-
-  let systemLayout = buildSystemLayout(
-    lockers,
-    columnDoorSpacing,
-    kioskLocationSize
-  );
+  }, [systemLayout]);
 
   return (
     <div className="App">
       {ioStatus ? <p> Connected </p> : <p> NOT CONNECTED </p>}
+      <Grid container justify="space-around">
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          onClick={() => {
+            console.log(
+              "Opening All Doors",
+              systemLayout.forEach((column) => console.log(column[0]))
+            );
+          }}
+          style={buttonStyle}
+        >
+          Open All
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          onClick={() => {
+            let doorsToOpen = [];
+
+            systemLayout.forEach((column) => {
+              doorsToOpen.push(column[0].lockID);
+            });
+
+            console.log("Opening Top Doors", doorsToOpen);
+            openLocker(doorsToOpen);
+          }}
+          style={buttonStyle}
+        >
+          Open Top Doors
+        </Button>
+        <Button
+          variant="contained"
+          color="primary"
+          size="large"
+          onClick={() => {
+            console.log("Open Bottom Doors");
+          }}
+          style={buttonStyle}
+        >
+          Open Bottom Doors
+        </Button>
+      </Grid>
       {props.activeLockerSystem ? (
-        <Grid container>
+        <Grid container justify="center">
           {systemLayout.map((lockerColumn, index) => (
             <Column
               key={index}
               lockerColumn={lockerColumn}
               columnNum={index + 1}
               doorStatus={doorStatus ? doorStatus[index] : [false]}
+              openLocker={openLocker}
             />
           ))}
         </Grid>
@@ -85,26 +142,51 @@ function LockerSystem(props) {
 
 export default LockerSystem;
 
+var openLocker = (num) => {
+  console.log("Opening Door", num);
+
+  let toOpen = [];
+  if (!Array.isArray(num)) {
+    toOpen.push(num);
+  } else {
+    toOpen = num;
+  }
+  axios
+    .post(`/api/v1/postOpenLock`, {
+      lock: toOpen,
+      attempts: 1,
+    })
+    .then((res) => {
+      // this.updateColors(res);
+      console.log(res.data);
+      // props.setDoorOpenStatus(res.data);
+    });
+};
+
 var setLockerSystemDoorStatus = (statusArr, systemLayout) => {
-  let testStatus = [];
-  let testColumn = [];
+  let systemDoorStatus = [];
+  let thisColumn = [];
 
   // First loop is to go through the columns
   for (let i = 0; i < systemLayout.length; i++) {
-    testColumn = [];
+    thisColumn = [];
+
     for (let j = 0; j < systemLayout[i].length; j++) {
       let position =
         8 * (systemLayout[i][j].cardID - 1) + (systemLayout[i][j].portID - 1);
 
-      let positionStatus =
+      let modbusDoorStatus =
         statusArr[position] === undefined ? false : statusArr[position];
 
-      testColumn.push(positionStatus);
+      thisColumn.push({
+        modbusDoorStatus: modbusDoorStatus,
+        doorOpeningAttemptStatus: false,
+      });
     }
-    testStatus.push(testColumn);
+    systemDoorStatus.push(thisColumn);
   }
-
-  return testStatus;
+  console.log(systemDoorStatus);
+  return systemDoorStatus;
 };
 
 var buildSystemLayout = (lockers, columnDoorSpacing, kioskLocationSize) => {

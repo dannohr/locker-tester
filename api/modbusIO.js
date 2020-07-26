@@ -6,7 +6,7 @@ let modbusIp = db.lockerSystem
     where: { active: 1 },
   })
   .then((server) => {
-    console.log(server);
+    // console.log(server);
     if (!server) {
       return null;
     }
@@ -21,7 +21,7 @@ let modbusServerOptions = {
   ip: "192.168.1.83",
   test: false,
   nocache: true,
-  nohttp: false,
+  nohttp: true,
 };
 
 module.exports.startModbusIO = () => {
