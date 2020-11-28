@@ -1,7 +1,6 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 // const startModbusIO = require("./modbusIO");
-
 require("dotenv").config();
 
 const app = express();
@@ -25,9 +24,9 @@ app.use(function (req, res, next) {
 
 app.use(process.env.API_ENDPOINT, routes);
 
-app.get("/api/hello", (req, res) => {
-  res.send({ express: "Yep. Modbus System Connected" });
-});
+// app.get("/api/hello", (req, res) => {
+//   res.send({ express: "Yep. Modbus System Connected" });
+// });
 
 // startModbusIO.startModbusIO();
 

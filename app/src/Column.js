@@ -9,7 +9,6 @@ function Column(props, style) {
   const layout = props.lockerColumn;
   const doorStatus = props.doorStatus;
   // console.log(doorStatus);
-  console.log(doorStatus);
 
   return (
     <div style={styles.lockerOutline}>

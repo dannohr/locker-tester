@@ -18,12 +18,12 @@ export default function App() {
   useEffect(() => {
     const fetchModbusData = async () => {
       const result = await axios("/api/v1/activeModbusServer");
-      console.log(result.data[0]);
+      // console.log(result.data[0]);
       setServer(result.data[0]);
     };
     const fetchLockerData = async () => {
       const result = await axios("/api/v1/activeLockerSystem");
-      console.log(result.data[0]);
+      // console.log(result.data[0]);
       setLockerSystem(result.data[0]);
     };
 

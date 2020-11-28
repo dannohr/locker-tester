@@ -24,10 +24,4 @@ router.post("/lockersystem", lockerSystemCtrl.add);
 router.put("/lockersystem/:id", lockerSystemCtrl.update);
 router.delete("/lockersystem/:id", lockerSystemCtrl.delete);
 
-// router.post("/login", authCtrl.login);
-// router.get("/me", authCtrl.me);
-// router.get("/test", (req, res) =>
-//   res.json({ status: "success", message: "Welcome To API" })
-// );
-
 module.exports = router;

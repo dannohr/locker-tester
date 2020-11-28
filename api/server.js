@@ -1,23 +1,15 @@
-#!/usr/bin/env node
-
-/**
- * Module dependencies.
- */
-
-const app = require("../app");
+const app = require("./app");
 const debug = require("debug")("backend:server");
 const http = require("http");
-const models = require("../models");
-const startModbusIO = require("../modbusIO");
-// require("dotenv").config();
+const models = require("./models");
+const startModbusIO = require("./modbusIO");
+
 /**
  * Get port from environment and store in Express.
  */
 
 const port = normalizePort(process.env.PORT || "3001");
 app.set("port", port);
-
-console.log("the port is", process.env.PORT);
 
 /**
  * Create HTTP server.

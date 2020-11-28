@@ -44,7 +44,7 @@ function LockerSystem(props) {
   );
 
   const [doorStatus, setdoorStatus] = useState();
-  const [doorOpenAttemptStatus, setDoorOpenAttemptStatus] = useState();
+  // const [doorOpenAttemptStatus, setDoorOpenAttemptStatus] = useState();
   const [ioStatus, setIoStatus] = useState(false);
 
   useEffect(() => {
@@ -59,7 +59,7 @@ function LockerSystem(props) {
       unit: 1,
       address: 0,
       length: 6 * 8,
-      interval: 10000,
+      interval: 500,
     });
 
     //this is what gets the polling data and updates state
@@ -185,7 +185,7 @@ var setLockerSystemDoorStatus = (statusArr, systemLayout) => {
     }
     systemDoorStatus.push(thisColumn);
   }
-  console.log(systemDoorStatus);
+  // console.log(systemDoorStatus);
   return systemDoorStatus;
 };
 
